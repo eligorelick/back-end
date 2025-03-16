@@ -1,27 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const { db } = require("../firebaseConfig");
+const { db } = require("../utils/firebaseConfig");
 
-// Get all jobs
+// GET all jobs
 router.get("/", async (req, res) => {
-    try {
-        const jobsSnapshot = await db.collection("jobs").get();
-        const jobs = jobsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        res.json(jobs);
-    } catch (error) {
-        res.status(500).json({ error: "Error fetching jobs" });
-    }
+  try {
+    const snapshot = await db.collection("jobs").get();
+    const jobs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    res.json({ jobs });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch jobs", details: error.message });
+  }
 });
 
-// Post a new job
+// POST a new job
 router.post("/", async (req, res) => {
-    const { title, description, price } = req.body;
-    try {
-        await db.collection("jobs").add({ title, description, price, createdAt: new Date() });
-        res.json({ success: true, message: "Job posted successfully" });
-    } catch (error) {
-        res.status(500).json({ error: "Error posting job" });
-    }
+  try {
+    const newJob = req.body;
+    const docRef = await db.collection("jobs").add(newJob);
+    res.json({ success: true, jobId: docRef.id });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create job", details: error.message });
+  }
 });
 
 module.exports = router;
