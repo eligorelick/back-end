@@ -1,9 +1,8 @@
 const admin = require("firebase-admin");
 
-// Import Firebase Admin SDK credentials
-const serviceAccount = require("./serviceAccountKey.json");  // Load the JSON key file
+// Load Firebase credentials from environment variables
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
-// Initialize Firebase Admin SDK
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
