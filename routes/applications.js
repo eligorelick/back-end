@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { db } = require("../firebaseConfig");
+const { db, auth } = require("../utils/firebaseConfig"); // ✅ Corrected path
 
 // Apply for a job
 router.post("/", async (req, res) => {
