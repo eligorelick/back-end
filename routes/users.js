@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { auth } = require("../firebaseConfig");
+const { db, auth } = require("../utils/firebaseConfig"); // ✅ Corrected path
 
 // Get user info
 router.get("/:uid", async (req, res) => {
